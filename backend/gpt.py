@@ -15,7 +15,7 @@ def chat(prompt):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "In a maximum of 3 words, decipher what the given receipt item is. Think about your answer carefully before you respond and try to use as little words as possible."},
+            {"role": "system", "content": "Given a hard-to-understand receipt item, identify what it most likely is in as few words as possible."},
             {
                 "role": "user",
                 "content": prompt,
@@ -24,3 +24,9 @@ def chat(prompt):
     )
 
     return response.choices[0].message.content.strip()
+
+if __name__ == "__main__":
+    user_in = input("\nYou: ")
+    while user_in not in ["", "exit", "quit"]:
+        print("\nBot:", chat(user_in))
+        user_in = input("\nYou: ")
