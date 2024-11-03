@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, Alert, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 
@@ -15,8 +15,14 @@ export default function ReceiptsScreen() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const {username} = useLocalSearchParams();
+  console.log("Successful Received username in ReceiptsScreen:");
 
   useEffect(() => {
+    if (!username) {
+      Alert.alert("Error", "Username not provided.");
+      return;
+    }
+
     const fetchReceipts = async () => {
       try {
         // Fetch uploaded receipts

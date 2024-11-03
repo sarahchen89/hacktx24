@@ -16,6 +16,7 @@ export default function SignIn() {
         });
   
         if (response.ok) {
+            console.log("Successful Navigating with username:", username);
           // Navigate to the receipts page if the login is successful
           router.push({ pathname:"../(tabs)/index", params: {username}});
         } else {

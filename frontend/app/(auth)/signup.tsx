@@ -5,16 +5,16 @@ import CustomButton from "@/components/CustomButton";
 
 export default function SignUp() {
   const router = useRouter();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = async () => {
     const signUpData = {
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       username,
       email,
       password,
@@ -33,7 +33,7 @@ export default function SignUp() {
 
       if (response.ok) {
         Alert.alert("Success", "Account created successfully!");
-        router.push("./index"); // Redirect to login after successful signup
+        router.back(); // Redirect to login after successful signup
       } else {
         Alert.alert("Signup Failed", data.message || "Please check your information.");
       }
@@ -50,7 +50,7 @@ export default function SignUp() {
         style={styles.input}
         placeholder="First Name"
         placeholderTextColor="#d1c9ec"
-        value={firstName}
+        value={first_name}
         onChangeText={setFirstName}
       />
 
@@ -58,7 +58,7 @@ export default function SignUp() {
         style={styles.input}
         placeholder="Last Name"
         placeholderTextColor="#d1c9ec"
-        value={lastName}
+        value={last_name}
         onChangeText={setLastName}
       />
 
