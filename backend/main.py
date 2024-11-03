@@ -19,11 +19,12 @@ def create_user():
     last_name = request.json.get('last_name')
     email = request.json.get('email')
     username = request.json.get('username')
+    password = request.json.get('password')
 
-    if not first_name or not last_name or not email or not username:
+    if not first_name or not last_name or not email or not username or not password:
         return jsonify({"error": "Missing data"}), 400
     
-    new_user = User(first_name=first_name, last_name=last_name, email=email, username=username)
+    new_user = User(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
     try:
         db.session.add(new_user)
         db.session.commit()
@@ -42,6 +43,7 @@ def update_user(username):
     user.first_name = data.get('first_name', user.first_name)
     user.last_name = data.get('last_name', user.last_name)
     user.email = data.get('email', user.email)
+    user.password = data.get('password', user.password)
 
     try:
         db.session.commit()
@@ -152,7 +154,7 @@ def get_items(username, receipt_id):
     return jsonify({"items": json_items})
 
 @app.route('/api/<string:username>/<int:receipt_id>/<int:item_id>/status/<string:pay>', methods=['PATCH'])
-def update_item(username, receipt_id, item_id, pay):
+def paid_item(username, receipt_id, item_id, pay):
     user = User.query.get(username)
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -178,6 +180,56 @@ def update_item(username, receipt_id, item_id, pay):
     
     status_message = "paid" if item.paid else "unpaid"
     return jsonify({"message": f"Item marked as {status_message} successfully"}), 200
+
+@app.route('/api/<string:username1>/<int:receipt_id>/<int:item_id>/payee/<string:username2>', methods=['PATCH'])
+def assign_item(username1, receipt_id, item_id, username2):
+    user = User.query.get(username1)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Query the receipt directly related to the user
+    receipt = Receipt.query.get(receipt_id)
+    if not receipt or receipt not in user.receipts:
+        return jsonify({"error": "Receipt not found for this user"}), 404
+
+    # Query the item and verify it's part of the receipt
+    item = Item.query.get(item_id)
+    if not item or item.receipt_id != receipt_id:
+        return jsonify({"error": "Item not found for this receipt"}), 404
+
+    # Query the user to whom the item is being transferred
+    payee = User.query.get(username2)
+    if not payee:
+        return jsonify({"error": "Payee not found"}), 404
+    
+    # Update the item with the new username
+    item.username = username2
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 400
+    
+    return jsonify({"message": "Item transferred successfully"}), 200
+
+@app.route('/api/<string:username>/<int:receipt_id>/<int:item_id>/decipher', methods=['GET'])
+def decipher_item(username, receipt_id, item_id):
+    user = User.query.get(username)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Query the receipt directly related to the user
+    receipt = Receipt.query.get(receipt_id)
+    if not receipt or receipt not in user.receipts:
+        return jsonify({"error": "Receipt not found for this user"}), 404
+
+    # Query the item and verify it's part of the receipt
+    item = Item.query.get(item_id)
+    if not item or item.receipt_id != receipt_id:
+        return jsonify({"error": "Item not found for this receipt"}), 404
+
+    return jsonify({"message": chat(item.name)})
 ####################################################################################################
 
 if __name__ == "__main__":

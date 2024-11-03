@@ -10,6 +10,7 @@ user_receipt_association = db.Table('user_receipt',
 # User has many Items
 class User(db.Model):
     username = db.Column(db.String(16), unique=True, nullable=False, primary_key=True)
+    password = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
