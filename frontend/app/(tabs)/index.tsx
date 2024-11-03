@@ -19,7 +19,7 @@ export default function SignIn() {
         if (response.ok) {
             console.log("Successful Navigating with username:", username);
           // Navigate to the receipts page if the login is successful
-          router.push({ pathname:"./(tabs)/index", params: {username}});
+          router.navigate({ pathname:"./receipt", params: {username}});
         } else {
           const data = await response.json();
           Alert.alert("Sign In Failed", data.error || "Invalid credentials.");
@@ -60,7 +60,7 @@ export default function SignIn() {
 
       <CustomButton
         title="Don't Have an Account? Sign Up Here"
-        onPress={() => router.push("/signup")}
+        onPress={() => router.navigate("/signup")}
         style={styles.signupButton}
         paddingVertical={10}
         paddingHorizontal={25}

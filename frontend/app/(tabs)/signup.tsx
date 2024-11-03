@@ -33,7 +33,7 @@ export default function SignUp() {
 
       if (response.ok) {
         Alert.alert("Success", "Account created successfully!");
-        router.back(); // Redirect to login after successful signup
+        router.navigate("./index"); // Redirect to login after successful signup
       } else {
         Alert.alert("Signup Failed", data.message || "Please check your information.");
       }
@@ -103,7 +103,7 @@ export default function SignUp() {
 
       <CustomButton
         title="Back to Sign In"
-        onPress={() => router.back()}
+        onPress={() => router.navigate("./index")}
         style={styles.backButton}
         paddingVertical={10}
         paddingHorizontal={20}
