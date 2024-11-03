@@ -1,23 +1,24 @@
-import React, { useState }  from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
+import CustomButton from "@/components/CustomButton";
 
 export default function SignUp() {
-    const router = useRouter();
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-  
-    const handleSignUp = () => {
-      // Handle sign-up logic here
-      console.log('First Name:', firstName);
-      console.log('Last Name:', lastName);
-      console.log('Username:', username);
-      console.log('Email:', email);
-      console.log('Password:', password);
-    }
+  const router = useRouter();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignUp = () => {
+    // Handle sign-up logic here
+    console.log("First Name:", firstName);
+    console.log("Last Name:", lastName);
+    console.log("Username:", username);
+    console.log("Email:", email);
+    console.log("Password:", password);
+  };
 
   return (
     <View style={styles.container}>
@@ -29,14 +30,14 @@ export default function SignUp() {
         value={firstName}
         onChangeText={setFirstName}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Last Name"
         value={lastName}
         onChangeText={setLastName}
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -44,7 +45,7 @@ export default function SignUp() {
         onChangeText={setUsername}
         autoCapitalize="none"
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -53,7 +54,7 @@ export default function SignUp() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      
+
       <TextInput
         style={styles.input}
         placeholder="Password"
@@ -61,39 +62,61 @@ export default function SignUp() {
         onChangeText={setPassword}
         secureTextEntry
       />
+
+      <CustomButton
+        title="Sign Up"
+        onPress={handleSignUp}
+        paddingVertical={15}
+        fontSize={18}
+        fontWeight="bold"
+        color='#d1c9ec'
+      />
+
       <Text style={styles.subTitle}> Already Have An Account?</Text>
-      <Button title="Back To Sign In"
-        onPress={() => router.back()} 
-        color="#ADD8E6"
-        accessibilityLabel="Back To Sign In Button"></Button>
+
+      <CustomButton
+        title="Back to Sign In"
+        onPress={() => router.back()}
+        style={styles.backButton}
+        paddingVertical={10}
+        paddingHorizontal={20}
+        fontSize={16}
+        fontWeight="normal"
+        color='#add8e6'
+      />
     </View>
-    );
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-      backgroundColor: 'white',
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 20,
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 20,
-      marginTop: 20,
-    },
-    subTitle: {
-        fontSize: 15,
-        marginBottom: 10,
-      },
-    input: {
-      width: '50%',
-      padding: 10,
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      marginBottom: 15,
-    },
-  });
+  container: {
+    backgroundColor: "#060631",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    color: "#d1c9ec",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  subTitle: {
+    color: '#add8e6',
+    fontSize: 15,
+    marginBottom: 5,
+    marginTop: 10,
+  },
+  input: {
+    color: "#d1c9ec",
+    width: "50%",
+    padding: 10,
+    borderColor: "#d1c9ec",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 15,
+  },
+  backButton: {
+    marginTop: 10,
+  },
+});

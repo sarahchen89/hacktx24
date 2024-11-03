@@ -20,7 +20,7 @@ export default function CustomButton({
   paddingHorizontal = 20,
   fontSize = 16,
   fontWeight = 'bold',
-  color = '#d1c9ec',          // Default color (blue) if no color is specified
+  color = '#d1c9ec',          // Default color (lavender) if no color is specified
 }: CustomButtonProps) {
   return (
     <TouchableOpacity
