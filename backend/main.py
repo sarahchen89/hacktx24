@@ -3,6 +3,7 @@ from config import app, db
 from models import User, Receipt, Item
 from gpt import chat
 from receipt_scan import parse_receipt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # U S E R S
 ####################################################################################################
@@ -23,7 +24,9 @@ def create_user():
     if not all([first_name, last_name, email, username, password]):
         return jsonify({"error": "Missing data"}), 400
 
-    new_user = User(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
+    hashed_password = generate_password_hash(password)
+    new_user = User(first_name=first_name, last_name=last_name, email=email, username=username, password=hashed_password)
+
     try:
         db.session.add(new_user)
         db.session.commit()
@@ -38,7 +41,7 @@ def validate_user(username, password):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    if user.password != password:
+    if not check_password_hash(user.password, password):
         return jsonify({"error": "Invalid password"}), 403
 
     return jsonify({"message": "User validated successfully"}), 200
