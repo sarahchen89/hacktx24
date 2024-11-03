@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 
@@ -8,11 +8,24 @@ export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     // handle sign in logic
-    console.log("Username:", username);
-    console.log("Password:", password);
-  };
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/${username}/validate_user/${password}`, {
+          method: "GET",
+        });
+  
+        if (response.ok) {
+          // Navigate to the receipts page if the login is successful
+          router.push("../(tabs)/index");
+        } else {
+          const data = await response.json();
+          Alert.alert("Sign In Failed", data.error || "Invalid credentials.");
+        }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred during sign-in.");
+      }
+    };
 
   return (
     <View style={styles.container}>
