@@ -9,7 +9,7 @@ export default function SignIn() {
         alignItems: "center",
       }}
     >
-      <Text>Sign in.</Text>
+      <Text>Sign in. Or else...</Text>
     </View>
   );
 }
