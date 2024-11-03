@@ -2,23 +2,23 @@ from config import db
 
 # Association table for the many-to-many relationship between Users and Receipts
 user_receipt_association = db.Table('user_receipt',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('username', db.String(16), db.ForeignKey('user.username'), primary_key=True),
     db.Column('receipt_id', db.Integer, db.ForeignKey('receipt.id'), primary_key=True)
 )
 
 # User has many Receipts
 # User has many Items
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(16), unique=True, nullable=False, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
     receipts = db.relationship('Receipt', secondary=user_receipt_association, back_populates='users')
-    items = db.relationship('Item', backref='user', lazy=True, foreign_keys='Item.user_id')
+    items = db.relationship('Item', backref='user', lazy=True, foreign_keys='Item.username')
 
     def to_json(self, include_receipts=True):
         return {
-            'id': self.id,
+            'username': self.username,
             'email': self.email,
             'first_name': self.first_name,
             'last_name': self.last_name,
@@ -50,7 +50,8 @@ class Item(db.Model):
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Float, nullable=False)
     receipt_id = db.Column(db.Integer, db.ForeignKey('receipt.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # allow an Item not to be assigned to a User
+    username = db.Column(db.String(16), db.ForeignKey('user.username'), nullable=True) # allow an Item not to be assigned to a User
+    paid = db.Column(db.Boolean, default=False)
 
     def to_json(self):
         return {
@@ -58,5 +59,6 @@ class Item(db.Model):
             'name': self.name,
             'price': self.price,
             'receipt_id': self.receipt_id,
-            'user_id': self.user_id
+            'username': self.username,
+            'paid': self.paid
         }
