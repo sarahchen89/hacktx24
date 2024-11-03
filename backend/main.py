@@ -32,7 +32,18 @@ def create_user():
 
     return jsonify({"message": "User created successfully"}), 201
 
-@app.route('/api/update_user/<string:username>', methods=['PATCH'])
+@app.route('/api/<string:username>/validate_user/<string:password>', methods=['GET'])
+def validate_user(username, password):
+    user = User.query.get(username)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if user.password != password:
+        return jsonify({"error": "Invalid password"}), 403
+
+    return jsonify({"message": "User validated successfully"}), 200
+
+@app.route('/api/<string:username>/update_user', methods=['PATCH'])
 def update_user(username):
     user = User.query.get(username)
     if not user:
@@ -51,7 +62,7 @@ def update_user(username):
 
     return jsonify({"message": "User updated successfully"}), 200
 
-@app.route('/api/delete_user/<string:username>', methods=['DELETE'])
+@app.route('/api/<string:username>/delete_user', methods=['DELETE'])
 def delete_user(username):
     user = User.query.get(username)
     if not user:
