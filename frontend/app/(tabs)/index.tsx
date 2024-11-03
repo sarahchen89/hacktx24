@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from "react-native";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 
 interface Receipt {
@@ -14,7 +14,7 @@ export default function ReceiptsScreen() {
   const [assignedReceipts, setAssignedReceipts] = useState<Receipt[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const username = "replace_with_logged_in_username"; // You may need to manage user sessions
+  const {username} = useLocalSearchParams();
 
   useEffect(() => {
     const fetchReceipts = async () => {

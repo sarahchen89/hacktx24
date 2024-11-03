@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Alert, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import CustomButton from "@/components/CustomButton";
 
@@ -11,13 +11,35 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = () => {
-    // Handle sign-up logic here
-    console.log("First Name:", firstName);
-    console.log("Last Name:", lastName);
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleSignUp = async () => {
+    const signUpData = {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+    };
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/create_user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signUpData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert("Success", "Account created successfully!");
+        router.push("./index"); // Redirect to login after successful signup
+      } else {
+        Alert.alert("Signup Failed", data.message || "Please check your information.");
+      }
+    } catch (error) {
+      Alert.alert("Signup Failed", "An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -27,6 +49,7 @@ export default function SignUp() {
       <TextInput
         style={styles.input}
         placeholder="First Name"
+        placeholderTextColor="#d1c9ec"
         value={firstName}
         onChangeText={setFirstName}
       />
@@ -34,6 +57,7 @@ export default function SignUp() {
       <TextInput
         style={styles.input}
         placeholder="Last Name"
+        placeholderTextColor="#d1c9ec"
         value={lastName}
         onChangeText={setLastName}
       />
@@ -41,6 +65,7 @@ export default function SignUp() {
       <TextInput
         style={styles.input}
         placeholder="Username"
+        placeholderTextColor="#d1c9ec"
         value={username}
         onChangeText={setUsername}
         autoCapitalize="none"
@@ -49,6 +74,7 @@ export default function SignUp() {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#d1c9ec"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -58,6 +84,7 @@ export default function SignUp() {
       <TextInput
         style={styles.input}
         placeholder="Password"
+        placeholderTextColor="#d1c9ec"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -69,10 +96,10 @@ export default function SignUp() {
         paddingVertical={15}
         fontSize={18}
         fontWeight="bold"
-        color='#d1c9ec'
+        color="#d1c9ec"
       />
 
-      <Text style={styles.subTitle}> Already Have An Account?</Text>
+      <Text style={styles.subTitle}>Already Have An Account?</Text>
 
       <CustomButton
         title="Back to Sign In"
@@ -82,7 +109,7 @@ export default function SignUp() {
         paddingHorizontal={20}
         fontSize={16}
         fontWeight="normal"
-        color='#add8e6'
+        color="#add8e6"
       />
     </View>
   );
@@ -102,14 +129,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   subTitle: {
-    color: '#add8e6',
+    color: "#add8e6",
     fontSize: 15,
     marginBottom: 5,
     marginTop: 10,
   },
   input: {
     color: "#d1c9ec",
-    width: "50%",
+    width: "80%",
     padding: 10,
     borderColor: "#d1c9ec",
     borderWidth: 1,

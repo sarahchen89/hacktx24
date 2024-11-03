@@ -17,7 +17,7 @@ export default function SignIn() {
   
         if (response.ok) {
           // Navigate to the receipts page if the login is successful
-          router.push("../(tabs)/index");
+          router.push({ pathname:"../(tabs)/index", params: {username}});
         } else {
           const data = await response.json();
           Alert.alert("Sign In Failed", data.error || "Invalid credentials.");
