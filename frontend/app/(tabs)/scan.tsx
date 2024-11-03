@@ -6,7 +6,7 @@ import * as FileSystem from 'expo-file-system';
 export default function ImagePickerExample() {
   const [image, setImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const username = 'your-username'; // Replace with actual username or a variable holding the username
+  const username = localStorage.getItem('username'); // Replace with actual username or a variable holding the username
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
